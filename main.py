@@ -2,7 +2,7 @@ import io
 
 import numpy as np
 from fastapi import FastAPI, UploadFile, File, HTTPException
-from pil import Image
+from PIL import Image
 from starlette.middleware.cors import CORSMiddleware
 import keras
 app = FastAPI()
@@ -19,7 +19,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-model = keras.models.load_model('basesd_model_new.h5')
+model = keras.models.load_model('model/basesd_model_new.h5')
 
 # Class mapping
 class_names = {
