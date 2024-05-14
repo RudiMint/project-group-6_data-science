@@ -21,8 +21,6 @@ origins = [
     "http://host.docker.internal:8000"
     ]
 
-#origins = ["http://localhost:8000"]
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -31,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Load the pre-trained model
 model = keras.models.load_model('model/basesd_model_new.h5')
 
 # Class mapping
@@ -50,11 +49,32 @@ class_names = {
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root(request: Request):
+    """
+    Render the main page.
+
+    Args:
+        request (Request): The request object.
+
+    Returns:
+        HTMLResponse: The rendered HTML response.
+    """
     return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/classify/")
 async def classify_image(file: UploadFile = File(...)):
+    """
+    Classify an uploaded image using a pre-trained model.
+
+    Args:
+        file (UploadFile): The uploaded image file (JPEG or PNG).
+
+    Returns:
+        dict: A dictionary with the predicted class index and class name.
+
+    Raises:
+        HTTPException: If the uploaded file is not a JPEG or PNG image or if the image format is invalid.
+    """
     # Check file type
     if file.content_type not in ["image/jpeg", "image/png"]:
         raise HTTPException(status_code=400, detail="Invalid file type. Please upload a JPEG or PNG image.")

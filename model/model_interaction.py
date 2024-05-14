@@ -7,7 +7,7 @@ from PIL import Image
 
 model = None
 filepath = "model/basesd_model_new.h5"  # "model/weights.h5"
- class_names = [
+class_names = [
     "Літак",
     "Автомобіль",
     "Птах",
