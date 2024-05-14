@@ -1,15 +1,27 @@
 import io
-
+import keras
 import numpy as np
+
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from PIL import Image
 from starlette.middleware.cors import CORSMiddleware
-import keras
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from starlette.requests import Request
+from fastapi.staticfiles import StaticFiles
+
+
 app = FastAPI()
 
+templates = Jinja2Templates(directory="templates")
+
+app.mount("/static", StaticFiles(directory="templates/static"), name="static")
+
 origins = [
-    "http://localhost:8000"
+    "http://host.docker.internal:8000"
     ]
+
+#origins = ["http://localhost:8000"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,9 +48,9 @@ class_names = {
 }
 
 
-@app.get("/")
-def read_root():
-    return {"message": "Start Page"}
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.post("/classify/")

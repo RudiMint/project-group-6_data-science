@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classifier</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <style>
+        body {
+            background-color: #8e955b;
+            font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .btn-primary {
+        background-color: #8e955b;
+        border-color: #8e955b;
+        color: #fff;
+        border-radius: 5px;
+        }
+
+        .btn-primary:hover {
+        background-color: #646940;
+        border-color: #555;
+        }
+        .form-control-file {
+            display: none;
+        }
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #8e955b;
+            color: #fff;
+        }
+        .custom-file-upload:hover {
+            background-color: #646940;
+        }
+        .result-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #8e955b;
+            border-radius: 5px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="h2 mb-4">Image Classifier</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <form id="image-form" enctype="multipart/form-data">
+                <div class="input-group mb-3">
+                    <input type="file" id="image" name="image" class="form-control form-control-file">
+                    <label for="image" class="input-group-text custom-file-upload">Choose Image</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Classify</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <div id="result" class="result-box mt-4"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    document.getElementById('image-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('file', document.getElementById('image').files[0]);
+
+        const response = await fetch('/classify/', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        const resultBox = document.getElementById('result');
+        resultBox.innerHTML = `<p>Predicted class: ${data.class_name}</p>`;
+        resultBox.classList.add('result-box');
+    });
+</script>
+
+</body>
+</html>
