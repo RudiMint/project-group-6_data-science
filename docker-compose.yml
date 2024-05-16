@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  web:
+    image: andriivlasiuk1991/project-group-6_data-science:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - mynet
+    command: ["bash", "-c", "uvicorn main:app --host 0.0.0.0 --reload && start http://127.0.0.1:8000"]
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/project-group-6_data-science
+    tty: true
+    stdin_open: true
+
+networks:
+  mynet:
+    driver: bridge
