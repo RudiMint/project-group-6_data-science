@@ -1,6 +1,7 @@
 import io
 import keras
 import numpy as np
+import webbrowser
 
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from PIL import Image
@@ -46,6 +47,8 @@ class_names = {
     8: "ship(корабель)",
     9: "truck(вантажівка)"
 }
+
+webbrowser.open_new_tab("http://127.0.0.1:8000")
 
 
 @app.get("/", response_class=HTMLResponse)
